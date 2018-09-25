@@ -10,11 +10,31 @@
 </head>
 <body>
   <div class="login-page">
+      @if($errors->all())
+          <div class="alert alert-danger" role="alert">
+              @foreach($errors->all() as $error)
+                  <li style="list-style: none">{{$error}}</li>
+              @endforeach
+          </div>
+      @endif
+          @if(session('message'))
+              <div class="alert alert-danger" role="alert">
+                  {{session('message')}}
+              </div>
+          @endif
   <div class="form">
-    <form class="login-form">
-      <input type="text" placeholder="نام کاربری"/>
-      <input type="password" placeholder="رمز"/>
-      <button>ورود</button>
+         <form class="login-form" style="padding: 20px;" method="POST" action="{{route('login')}}">
+                  <input type="hidden" name="_token" value="{{csrf_token()}}">
+               <div class="form-group">
+                 <label for="exampleInputEmail1">ایمیل</label>
+                 <input name="email" type="email" class="form-control" value="{{Request::old('email')}}" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="ایمیل خود را وارد کنید">
+               </div>
+
+               <div class="form-group">
+                 <label for="exampleInputPassword1">رمز</label>
+                 <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="رمز">
+               </div>
+                <button type="submit" class="btn btn-primary">ثبت نام </button>
     </form>
   </div>
 </div>

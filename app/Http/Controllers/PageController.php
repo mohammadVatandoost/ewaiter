@@ -11,25 +11,6 @@ class PageController extends Controller
         return view('index');
     }
 
-    public function menu(){
-
-        return view('menu');
-    }
-
-    public function editFood(){
-
-        return view('editFood');
-    }
-
-    public function report(){
-
-        return view('report');
-    }
-
-    public function orders(){
-
-        return view('orders');
-    }
 
     public function contact(){
 

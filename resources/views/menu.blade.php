@@ -13,12 +13,12 @@
   </div>
   <hr/> -->
   <!-- Menu -->
- <div id="menu" class="tabcontent"> 
+ <div id="menu" class="tabcontent">
   <h3 class="text-center">برگرها</h3>
   <div class="row">
     <div class="col-sm-12 col-md-4 col-lg-4 food-card">
       <div class="card">
-             <img class="card-img-top" src="images/menu1.jpg" alt="Card image cap">
+             <img class="card-img-top" src="{{asset('storage/images/burger1.jpg')}}" alt="Card image cap">
              <div class="card-body" id="cardId1">
               <div class="row flex-row space-between">
                  <h5 class="card-title">پیتزا فلان</h5><span class="text-left">30000 تومان</span>
@@ -34,6 +34,32 @@
       </div>
     </div>
  </div>
+    <div id="menu" class="tabcontent">
+        <h3 class="text-center">برگرها</h3>
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4 food-card">
+                <div class="card">
+                    <img class="card-img-top" src="{{asset('storage/images/burger1.jpg')}}" alt="Card image cap">
+                    <div class="card-body" id="cardId1">
+                        <div class="row flex-row space-between">
+                            <h5 class="card-title">پیتزا فلان</h5><span class="text-left">30000 تومان</span>
+                        </div>
+                        <p class="card-text">گوشت ، فلفل، قارچ و پنیر پیتزار</p>
+                        <div class="flex-row space-around" id="food1">
+                            <a href="editFood.html" class="btn btn-primary">تغییر</a>
+                            <a href="" class="btn btn-primary">حذف</a>
+                            <a href="" class="btn btn-primary">موجود</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
  <!-- Menu category -->
  <div id="menuCategory" class="tabcontent"> 
     <h4>اضافه کردن دسته جدید</h4>

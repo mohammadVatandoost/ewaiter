@@ -14,14 +14,15 @@
 Route::get('/',['as'=>'main','uses'=>'PageController@index']);
 
 Route::get('login',['as'=>'login','uses'=>'AuthController@login']);
+Route::post('login',['as'=>'login','uses'=>'AuthController@post_login']);
 
-Route::get('menu',['as'=>'menu','uses'=>'PageController@menu']);
+Route::get('menu',['as'=>'menu','uses'=>'CashierController@menu']);
 
-Route::get('orders',['as'=>'orders','uses'=>'PageController@orders']);
+Route::get('orders',['as'=>'orders','uses'=>'CashierController@orders']);
 
-Route::get('report',['as'=>'report','uses'=>'PageController@report']);
+Route::get('report',['as'=>'report','uses'=>'CashierController@report']);
 
-Route::get('edit-food',['as'=>'editFood','uses'=>'PageController@editFood']);
+Route::get('edit-food',['as'=>'editFood','uses'=>'CashierController@editFood']);
 
 Route::get('contact',['as'=>'contact','uses'=>'PageController@contact']);
 
