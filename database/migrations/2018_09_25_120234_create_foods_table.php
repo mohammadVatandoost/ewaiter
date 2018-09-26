@@ -17,9 +17,11 @@ class CreateFoodsTable extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('description');
-            $table->string('price');
+            $table->unsignedInteger('price')->default(0);
             $table->string('category');
+            $table->unsignedInteger('sold')->default(0);
             $table->mediumText('image')->nullable();
+            $table->string('valid')->default(1);
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatCashiersTable extends Migration
+class CreateOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreatCashiersTable extends Migration
      */
     public function up()
     {
-        Schema::create('cashiers', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('reset_password');
-            $table->string('remember_token');
+            $table->text('order');
+            $table->unsignedInteger('table_id');
+            $table->string('price');
+            $table->text('info')->nullable();
+            $table->string('deliver')->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreatCashiersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cashiers');
+        Schema::dropIfExists('orders');
     }
 }

@@ -3,18 +3,18 @@
 
 <div class="container" style="margin-top: 2%;">
   <h4>تغییر اطلاعات غذا</h4>
-    <form action="/action_page.php" style="margin-bottom: 2%;">
+    <form action="{{route('editFood',$type->id)}}" method="post" enctype="multipart/form-data" style="margin-bottom: 2%;">
       <div class="form-group">
        <label>نام غذا</label>
-       <input type="text" name="foodName" class="form-control" value="برگر">
+       <input type="text" name="foodName" class="form-control" placeholder="{{$type->name}}">
       </div>
       <div class="form-group">
        <label>توضیح غذا</label>
-       <input type="text" name="foodِDes" class="form-control" value="فوق العاده است">
+       <input type="text" name="foodDes" class="form-control" placeholder="{{$type->description}}">
       </div>
       <div class="form-group">
        <label>قیمت غذا</label>
-       <input type="number" name="foodِPrice" class="form-control" value="100000">
+       <input type="number" name="foodPrice" class="form-control" placeholder="{{$type->price}}">
       </div>
       <div class="form-group">
         <label for="sel1">انتخاب دسته غذا</label>
@@ -25,7 +25,7 @@
       </div>
       <div class="form-group">
        <label>عکس غذا</label>
-       <input type="file" name="foodِImage" class="form-control">
+       <input type="file" name="foodImage" class="form-control">
       </div>
       <button class="btn btn-primary col-md-1 col-sm-1">ذخیره</button>
     </form>
@@ -69,5 +69,6 @@ body {
 }
 </style>
 <script>
+
 </script>
 @endsection

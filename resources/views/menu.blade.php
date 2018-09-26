@@ -15,49 +15,29 @@
   <!-- Menu -->
  <div id="menu" class="tabcontent">
   <h3 class="text-center">برگرها</h3>
-  <div class="row">
-    <div class="col-sm-12 col-md-4 col-lg-4 food-card">
-      <div class="card">
-             <img class="card-img-top" src="{{asset('storage/images/burger1.jpg')}}" alt="Card image cap">
-             <div class="card-body" id="cardId1">
-              <div class="row flex-row space-between">
-                 <h5 class="card-title">پیتزا فلان</h5><span class="text-left">30000 تومان</span>
-              </div>
-              <p class="card-text">گوشت ، فلفل، قارچ و پنیر پیتزار</p>
-              <div class="flex-row space-around" id="food1">
-                <a href="editFood.html" class="btn btn-primary">تغییر</a>
-                <a href="" class="btn btn-primary">حذف</a>
-                <a href="" class="btn btn-primary">موجود</a>
-              </div>
+     <div class="row">
+         @foreach($burgers as $burger)
+             <div class="col-sm-12 col-md-4 col-lg-4 food-card">
+                 <div class="card">
+                     <img class="card-img-top" src="{{asset('storage/images/'.$burger->image)}}" alt="Card image cap">
+                     <div class="card-body" id="cardId{{$burger->id}}">
+                         <div class="row flex-row space-between">
+                             <h5 class="card-title"> {{$burger->name}}</h5><span class="text-left">{{$burger->price}} تومان</span>
+                         </div>
+                         <p class="card-text">{{$burger->description}}</p>
+                         <div class="flex-row space-around" id="{{$burger->id}}">
+                             <a href="{{route('editFood',$burger->id)}}" class="btn btn-primary">تغییر</a>
+                             <a href="" class="btn btn-primary">حذف</a>
+                             <a href="" class="btn btn-primary">موجود</a>
+                         </div>
+                     </div>
+                 </div>
              </div>
-          </div>
-      </div>
-    </div>
+         @endforeach
+     </div>
+
  </div>
-    <div id="menu" class="tabcontent">
-        <h3 class="text-center">برگرها</h3>
-        <div class="row">
-            <div class="col-sm-12 col-md-4 col-lg-4 food-card">
-                <div class="card">
-                    <img class="card-img-top" src="{{asset('storage/images/burger1.jpg')}}" alt="Card image cap">
-                    <div class="card-body" id="cardId1">
-                        <div class="row flex-row space-between">
-                            <h5 class="card-title">پیتزا فلان</h5><span class="text-left">30000 تومان</span>
-                        </div>
-                        <p class="card-text">گوشت ، فلفل، قارچ و پنیر پیتزار</p>
-                        <div class="flex-row space-around" id="food1">
-                            <a href="editFood.html" class="btn btn-primary">تغییر</a>
-                            <a href="" class="btn btn-primary">حذف</a>
-                            <a href="" class="btn btn-primary">موجود</a>
-                        </div>
-                    </div>
-                </div>
 
-
-
-            </div>
-        </div>
-    </div>
 
 
  <!-- Menu category -->

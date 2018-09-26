@@ -6,41 +6,37 @@
         <a href="" class="btn">دیروز</a>
         <a href="" class="btn btn-success">امروز</a>
       </div>
-      <div class="row" style="margin-top: 2%;margin-bottom: 2%;">
-        <div class="col-sm-12 col-md-4 col-lg-4">
-         <div class="card" style="padding: 1%;">
-          <div class="flex-row space-around">
-            <span>سفارش 5</span>
-            <span>میز 3</span>
-          </div>
-        <table class="table table-striped">
-         <tbody>
-          <tr>
-            <td>پیتزار فلان</td>
-            <td>4</td>
-            <td>100000</td>
-          </tr>
-          <tr>
-            <td>پیتزار فلان</td>
-            <td>4</td>
-            <td>100000</td>
-          </tr>
-          <tr>
-            <td>پیتزار فلان</td>
-            <td>4</td>
-            <td>100000</td>
-          </tr>
-         </tbody>
-        </table>
-        <span>مجموع کل : 10000000</span>
-        <p>توضقحات: لطفا داخل سادویج کالباس خیارشور نریزید.</p>
-          <div class="row space-around">
-            <button class="btn btn-primary">تمام شد</button>
-            <button class="btn btn-success">پرداخت شد</button>
+    @foreach($orders as $order)
+        <input type="text" hidden value="{{$i=0}}">
+        <div class="row" style="margin-top: 2%;margin-bottom: 2%;">
+            <div class="col-sm-12 col-md-4 col-lg-4">
+             <div class="card" style="padding: 1%;">
+              <div class="flex-row space-around">
+                <span>سفارش 5</span>
+                <span>میز {{$order->table_id}}</span>
+              </div>
+            <table class="table table-striped">
+             <tbody>
+                @for($i=0;$i<count(unserialize($order->order));$i++)
+              <tr>
+                <td> {{unserialize($order->order)[$i]['foodName']}}</td>
+                <td> {{unserialize($order->order)[$i]['foodNumber']}} </td>
+                <td>{{unserialize($order->order)[$i]['price']}}</td>
+              </tr>
+              @endfor
+             </tbody>
+            </table>
+            <span>مجموع کل : {{$order->price}}</span>
+            <p>توضیحات: {{$order->info}}.</p>
+              <div class="row space-around">
+                <button class="btn btn-primary">تمام شد</button>
+                <button class="btn btn-success">پرداخت شد</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+        <input type="hidden" value="{{$i=$i+1}}">
+    @endforeach
 </div>
 <style>
     body {

@@ -57,24 +57,15 @@
       </tr>
     </thead>
     <tbody>
+    @foreach($arr as $key=>$value)
       <tr>
-        <td>برگر</td>
-        <td>10</td>
-        <td>15000</td>
+        <td>{{$key}}</td>
+        <td>{{$value}}</td>
+        <td>{{\App\Food::where('name',$key)->first()->price}}</td>
         <td>150000</td>
       </tr>
       <tr>
-        <td>برگر</td>
-        <td>10</td>
-        <td>15000</td>
-        <td>150000</td>
-      </tr>
-      <tr>
-        <td>برگر</td>
-        <td>10</td>
-        <td>15000</td>
-        <td>150000</td>
-      </tr>
+    @endforeach
       <tr>
         <td></td>
         <td></td>

@@ -23,4 +23,11 @@ class AuthController extends Controller
 
         }
     }
+
+    public function logout(){
+
+        Auth::guard('cashier')->logout();
+
+        return redirect()->route('main');
+    }
 }
