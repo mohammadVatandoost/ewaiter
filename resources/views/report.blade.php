@@ -1,13 +1,13 @@
 @extends('master.layout')
 @section('content')
-
     <div class="container" style="margin-top: 2%;">
-  <form>
+  <form action="{{route('report')}}" method="post">
+      <input type="hidden" value="{{csrf_token()}}" name="_token">
    <div class="flex-row flex-wrap" id="calender">
       <span>از تاریخ</span>
       <select class="form-control" name="year1">
-         <option value="bergers">1397</option>
-         <option value="sandewitch">1396</option>
+         <option value="1397">1397</option>
+         <option value="1396">1396</option>
       </select>
       <select class="form-control" name="month1">
          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
@@ -26,8 +26,8 @@
       </select>
       <span>تا تاریخ</span>
       <select class="form-control" name="year2">
-         <option value="bergers">1397</option>
-         <option value="sandewitch">1396</option>
+         <option value="1397">1397</option>
+         <option value="1396">1396</option>
       </select>
       <select class="form-control" name="month2">
          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
@@ -45,7 +45,7 @@
          <option value="29">29</option><option value="30">30</option><option value="31">31</option>
       </select>
    </div>
-   <button class="btn btn-primary" style="margin: auto;display: block;">گزارش</button>
+   <button type="submit" class="btn btn-primary" style="margin: auto;display: block;">گزارش</button>
   </form>
    <table class="table table-striped" style="margin-top: 2%;">
     <thead>
@@ -57,12 +57,14 @@
       </tr>
     </thead>
     <tbody>
+    <input type="hidden" value="{{$sum=0}}">
     @foreach($arr as $key=>$value)
       <tr>
         <td>{{$key}}</td>
         <td>{{$value}}</td>
         <td>{{\App\Food::where('name',$key)->first()->price}}</td>
-        <td>150000</td>
+        <td id="price"> {{\App\Food::where('name',$key)->first()->price * $value}}</td>
+          <input type="hidden" value="{{$sum = $sum + \App\Food::where('name',$key)->first()->price * $value}}">
       </tr>
       <tr>
     @endforeach
@@ -70,7 +72,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><b>مجموع فروش : 2000000</b></td>
+        <td id="total_cost"><b>مجموع فروش : {{$sum}}</b></td>
       </tr>
     </tbody>
   </table>
@@ -137,6 +139,7 @@ body {
 }
 </style>
 <script>
+
 </script>
 
 @endsection

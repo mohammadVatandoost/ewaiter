@@ -1,6 +1,6 @@
 @extends('master.layout')
 @section('content')
-<div class="container" style="margin-top: 2%;">
+<div class="container" style="margin-top: 2%;" id="app">
 <!-- Tab links -->
 <div class="tab" style="direction: rtl;">
   <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'menu')">منو</button>
@@ -43,55 +43,59 @@
  <!-- Menu category -->
  <div id="menuCategory" class="tabcontent"> 
     <h4>اضافه کردن دسته جدید</h4>
-    <form class="flex-row flex-start" action="/action_page.php" style="margin-bottom: 2%;">
-      <input class="form-control col-md-3 col-sm-8" type="text" name="category" placeholder="نام دسته">
-      <input class="form-control col-md-3 col-sm-2" type="number" name="priority" placeholder="ترتیب نمایش">
-      <button class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
+
+         <div id="message" hidden="true" class="alert alert-success" role="alert">
+             <span>دسته جدید ایجاد شد</span>
+         </div>
+
+    <form class="flex-row flex-start"  style="margin-bottom: 2%;">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+      <input id="category" class="form-control col-md-3 col-sm-8" type="text" name="category" placeholder="نام دسته">
+      <input id="priority" class="form-control col-md-3 col-sm-2" type="number" name="priority" placeholder="ترتیب نمایش">
+      <button onclick="sendData()" type="button" class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
     </form>
     <hr/>
     <h4>دسته های اضافه شده</h4>
     <ul>
+        @foreach($cats as $cat)
       <li>
         <div class="flex-row flex-start flex-center-align" style=" text-align: center;">
-          <a href="" class="btn btn-danger">حذف</a> <h5> برگرها </h5><input class="form-control" type="number" name="bergers" value="3" style="width: 100px;" />
+          <a id="{{$cat->id}}" onclick="removeCat({{$cat->id}})" class="btn btn-danger">حذف</a> <h5> {{$cat->type}} </h5><input class="form-control" type="number" name="{{$cat->type}}" value="{{$cat->priority}}" style="width: 100px;" />
         </div>
       </li>
-      <li>
-        <div class="flex-row flex-start flex-center-align" style=" text-align: center;">
-          <a href="editFood.html" class="btn btn-danger">حذف</a> <h5> برگرها </h5><input class="form-control" type="number" name="bergers" value="3" style="width: 100px;" />
-        </div>
-      </li>
+        @endforeach
     </ul>
-    <a href="" class="btn btn-success" style="display: block;margin: auto;">ذخیره</a>
+    <a  class="btn btn-success" style="display: block;margin: auto;">ذخیره</a>
  </div>
  <!-- Menu category -->
  <div id="menuFood" class="tabcontent"> 
     <h4>اضافه کردن غذا</h4>
-    <form action="/action_page.php" style="margin-bottom: 2%;">
+    <form action="{{route('addFood')}}" method="post" enctype="multipart/form-data" style="margin-bottom: 2%;">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
       <div class="form-group">
        <label>نام غذا</label>
        <input type="text" name="foodName" class="form-control">
       </div>
       <div class="form-group">
        <label>توضیح غذا</label>
-       <input type="text" name="foodِDes" class="form-control">
+       <input type="text" name="foodDes" class="form-control">
       </div>
       <div class="form-group">
        <label>قیمت غذا</label>
-       <input type="text" name="foodِPrice" class="form-control">
+       <input type="text" name="foodPrice" class="form-control">
       </div>
       <div class="form-group">
         <label for="sel1">انتخاب دسته غذا</label>
-        <select class="form-control" id="sel1" name="foodCategory">
-         <option value="bergers">برگرها</option>
-         <option value="sandewitch">ساندویچ ها</option>
+        <select @click="getCats" class="form-control" id="sel1" name="foodCategory">
+         <option value="" disabled>دسته بندی</option>
+         <option v-for="type in list" value="@{{ type }}">@{{ type }}</option>
         </select>
       </div>
       <div class="form-group">
        <label>عکس غذا</label>
-       <input type="file" name="foodِImage" class="form-control">
+       <input type="file" name="foodImage" class="form-control">
       </div>
-      <button class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
+      <button type="submit" class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
     </form>
  </div>
 </div>
@@ -243,6 +247,42 @@
 
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
+
+    function sendData() {
+        var category = document.getElementById('category').value;
+        var priority = document.getElementById('priority').value;
+
+        axios.post('{{route('addCategory')}}',{'category':category,'priority':priority}).then(function (response) {
+
+            if(response.data == 200){
+                document.getElementById('message').hidden=false
+            }
+        })
+
+    }
+    function removeCat(id) {
+        axios.post('{{route('removeCategory')}}',{'id':id}).then(function (response) {
+
+            console.log(response.data)
+        })
+    }
+
+    new Vue({
+        el:'#app',
+        data:{
+            list:['']
+        },
+        methods:{
+            getCats:function () {
+                vm = this;
+                axios.get('get-cats').then(function (response) {
+                    vm.list = response.data
+
+                })
+            }
+        }
+    });
+
 </script>
 
 @endsection

@@ -2,18 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 use App\Food;
 class PageController extends Controller
 {
     public function index(){
 
-        $pizzas = Food::where('category','pizza')->get();
-        $burgers = Food::where('category','burger')->get();
-        $sandwiches = Food::where('category','sandwich')->get();
-        $drinks = Food::where('category','drink')->get();
+        $types = Category::orderBy('priority','asc')->get()->pluck('type');
+        $foods = [];
+        for($i=0;$i<count($types);$i++){
 
-        return view('index',compact('pizzas','burgers','sandwiches','drinks'));
+            $foods[$i] = Food::where('category',$types[$i])->get();
+        }
+
+
+//        $pizzas = Food::where('category','پیتزا')->get();
+//        $burgers = Food::where('category','برگر')->get();
+//        $sandwiches = Food::where('category','ساندویچ')->get();
+//        $drinks = Food::where('category','نوشیدنی')->get();
+
+//        return view('index',compact('pizzas','burgers','sandwiches','drinks'));
+        return view('index',compact('foods','types'));
 
     }
 

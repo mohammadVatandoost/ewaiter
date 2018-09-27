@@ -29,8 +29,8 @@
             <span>مجموع کل : {{$order->price}}</span>
             <p>توضیحات: {{$order->info}}.</p>
               <div class="row space-around">
-                <button class="btn btn-primary">تمام شد</button>
-                <button class="btn btn-success">پرداخت شد</button>
+                <button onclick="delivered()" class="btn btn-primary">ارسال شد</button>
+                <button onclick="paid()" class="btn btn-success">پرداخت شد</button>
               </div>
             </div>
           </div>
@@ -104,6 +104,19 @@
         } else {
             x.className = "topnav";
         }
+    }
+    function delivered() {
+
+        axios.post('{{route('delivered')}}',{'id':{!! json_decode($order->id) !!}}).then(function (response) {
+
+            console.log(response.data)
+        })
+    }
+    function paid() {
+        axios.post('{{route('paid')}}',{'id':{!! json_decode($order->id) !!}}).then(function (response) {
+
+            console.log(response.data)
+        })
     }
 </script>
 @endsection

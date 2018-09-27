@@ -25,9 +25,20 @@ Route::get('orders',['as'=>'orders','uses'=>'CashierController@orders']);
 Route::post('send-order','UserController@sendOrder');
 
 Route::get('report',['as'=>'report','uses'=>'CashierController@report']);
+Route::post('report',['as'=>'report','uses'=>'CashierController@post_report']);
+
+Route::post('delivered',['as'=>'delivered','uses'=>'CashierController@delivered']);
+Route::post('paid',['as'=>'paid','uses'=>'CashierController@paid']);
 
 Route::get('edit-food/{id}',['as'=>'editFood','uses'=>'CashierController@editFood']);
 Route::post('edit-food/{id}',['as'=>'editFood','uses'=>'CashierController@post_editFood']);
 
+Route::get('get-cats','CashierController@getCats');
+Route::post('category/add',['as'=>'addCategory','uses'=>'CashierController@addCategory']);
+Route::post('category/remove',['as'=>'removeCategory','uses'=>'CashierController@removeCategory']);
+
+Route::post('food/add',['as'=>'addFood','uses'=>'CashierController@addFood']);
+
 Route::get('contact',['as'=>'contact','uses'=>'PageController@contact']);
+
 
