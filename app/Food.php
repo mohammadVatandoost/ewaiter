@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Food extends Model
 {
-    public $fillable = ['sold'];
+    public $fillable = ['valid','sold','name','price','image','description','category'];
 }

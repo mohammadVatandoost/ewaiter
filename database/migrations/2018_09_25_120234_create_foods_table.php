@@ -21,7 +21,7 @@ class CreateFoodsTable extends Migration
             $table->string('category');
             $table->unsignedInteger('sold')->default(0);
             $table->mediumText('image')->nullable();
-            $table->string('valid')->default(1);
+            $table->tinyInteger('valid')->default(1);
             $table->timestamps();
         });
     }

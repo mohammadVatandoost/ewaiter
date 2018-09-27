@@ -1,6 +1,6 @@
 @extends('master.layout')
 @section('content')
-<div class="container" style="margin-top: 2%;" id="app">
+<div class="container" style="margin-top: 2%;" id="app" xmlns="http://www.w3.org/1999/html">
 <!-- Tab links -->
 <div class="tab" style="direction: rtl;">
   <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'menu')">منو</button>
@@ -14,58 +14,71 @@
   <hr/> -->
   <!-- Menu -->
  <div id="menu" class="tabcontent">
-  <h3 class="text-center">برگرها</h3>
-     <div class="row">
-         @foreach($burgers as $burger)
-             <div class="col-sm-12 col-md-4 col-lg-4 food-card">
-                 <div class="card">
-                     <img class="card-img-top" src="{{asset('storage/images/'.$burger->image)}}" alt="Card image cap">
-                     <div class="card-body" id="cardId{{$burger->id}}">
-                         <div class="row flex-row space-between">
-                             <h5 class="card-title"> {{$burger->name}}</h5><span class="text-left">{{$burger->price}} تومان</span>
-                         </div>
-                         <p class="card-text">{{$burger->description}}</p>
-                         <div class="flex-row space-around" id="{{$burger->id}}">
-                             <a href="{{route('editFood',$burger->id)}}" class="btn btn-primary">تغییر</a>
-                             <a href="" class="btn btn-primary">حذف</a>
-                             <a href="" class="btn btn-primary">موجود</a>
+
+     @for($i=0;$i<count($foods);$i++)
+         <h3 class="text-center">{{$types[$i]}}</h3>
+         <div class="row">
+             @foreach($foods[$i] as $item)
+                 <div class="col-sm-12 col-md-4 col-lg-4 food-card">
+                     <div class="card">
+                         <img width="300" height="200" class="card-img-top" src="{{asset('storage/images/'.$item->image)}}" alt="Card image cap">
+                         <div class="card-body" id="cardId{{$item->id}}">
+                             <div class="row flex-row space-between">
+                                 <h5 class="card-title"> {{$item->name}}</h5><span class="text-left">{{$item->price}} تومان</span>
+                             </div>
+                             <p class="card-text">{{$item->description}}</p>
+                             <div class="flex-row space-around" id="{{$item->id}}">
+                                 <a href="{{route('editFood',$item->id)}}" class="btn btn-primary">تغییر</a>
+                                 <button id="btn{{$item->id}}" @click="valid({{$item->id}})" class="btn btn-warning" >موجود</button>
+                                 <form action="{{route('remove',$item->id)}}" method="post">
+                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                     <button id="{{$item->id}}"  type="submit" class="btn btn-danger">حذف</button>
+                                 </form>
+
+                             </div>
                          </div>
                      </div>
                  </div>
-             </div>
-         @endforeach
-     </div>
+             @endforeach
+         </div>
+     @endfor
 
  </div>
-
 
 
  <!-- Menu category -->
  <div id="menuCategory" class="tabcontent"> 
     <h4>اضافه کردن دسته جدید</h4>
 
-         <div id="message" hidden="true" class="alert alert-success" role="alert">
-             <span>دسته جدید ایجاد شد</span>
-         </div>
+         {{--<div id="message"  class="alert alert-success" role="alert">--}}
+             {{--<span>دسته جدید ایجاد شد</span>--}}
+         {{--</div>--}}
 
-    <form class="flex-row flex-start"  style="margin-bottom: 2%;">
+    <form action="{{route('addCategory')}}" method="post" class="flex-row flex-start"  style="margin-bottom: 2%;">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
       <input id="category" class="form-control col-md-3 col-sm-8" type="text" name="category" placeholder="نام دسته">
-      <input id="priority" class="form-control col-md-3 col-sm-2" type="number" name="priority" placeholder="ترتیب نمایش">
-      <button onclick="sendData()" type="button" class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
+      <input id="priority" class="form-control col-md-3 col-sm-2" type="text" name="priority" placeholder="ترتیب نمایش">
+      <button  type="submit" class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
     </form>
     <hr/>
     <h4>دسته های اضافه شده</h4>
-    <ul>
-        @foreach($cats as $cat)
-      <li>
-        <div class="flex-row flex-start flex-center-align" style=" text-align: center;">
-          <a id="{{$cat->id}}" onclick="removeCat({{$cat->id}})" class="btn btn-danger">حذف</a> <h5> {{$cat->type}} </h5><input class="form-control" type="number" name="{{$cat->type}}" value="{{$cat->priority}}" style="width: 100px;" />
-        </div>
-      </li>
-        @endforeach
-    </ul>
-    <a  class="btn btn-success" style="display: block;margin: auto;">ذخیره</a>
+     <form action="{{route('catPriority')}}" method="post">
+         <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <ul>
+            @foreach($cats as $cat)
+          <li>
+            <div class="flex-row flex-start flex-center-align" style=" text-align: center;">
+              <input id="{{$cat->id}}" @click="removeCkBox({{$cat->id}})"  type="checkbox" >
+                <h5> {{$cat->type}} </h5>
+                <input id="{{$cat->type}}" class="form-control" type="text" name="{{$cat->type}}" value="{{$cat->priority}}" style="width: 100px;" />
+                <input name="removeList" type="hidden" value="@{{ removeList }}">
+
+            </div>
+          </li>
+            @endforeach
+        </ul>
+        <button type="submit" class="btn btn-success" style="display: block;margin: auto;">ذخیره</button>
+     </form>
  </div>
  <!-- Menu category -->
  <div id="menuFood" class="tabcontent"> 
@@ -82,12 +95,12 @@
       </div>
       <div class="form-group">
        <label>قیمت غذا</label>
-       <input type="text" name="foodPrice" class="form-control">
+       <input type="number" step="1000" min="0" name="foodPrice" class="form-control">
       </div>
       <div class="form-group">
         <label for="sel1">انتخاب دسته غذا</label>
-        <select @click="getCats" class="form-control" id="sel1" name="foodCategory">
-         <option value="" disabled>دسته بندی</option>
+        <select  class="form-control" id="sel1" name="foodCategory">
+         <option selected  disabled>دسته بندی</option>
          <option v-for="type in list" value="@{{ type }}">@{{ type }}</option>
         </select>
       </div>
@@ -263,23 +276,44 @@
     function removeCat(id) {
         axios.post('{{route('removeCategory')}}',{'id':id}).then(function (response) {
 
-            console.log(response.data)
         })
     }
 
     new Vue({
         el:'#app',
         data:{
-            list:['']
+            list:[''],
+            hidden:true,
+            removeList:[],
+
         },
         methods:{
-            getCats:function () {
-                vm = this;
-                axios.get('get-cats').then(function (response) {
-                    vm.list = response.data
+            valid:function (id) {
+                 vm = this;
+                axios.get('{{route('valid')}}'+'?id='+id).then(function (response) {
+                    var stat = document.getElementById('btn'+id).innerHTML;
+                   if(stat === 'موجود'){
+                       document.getElementById('btn'+id).innerHTML = 'ناموجود'
 
+                   }else if(stat === 'ناموجود'){
+                       document.getElementById('btn'+id).innerHTML = 'موجود'
+                   }
                 })
+            },
+            removeCkBox:function (id) {
+
+                 this.removeList.unshift(id);
+
+
             }
+        },
+        created:function () {
+
+            vm = this;
+            axios.get('{{route('getCats')}}').then(function (response) {
+                vm.list = response.data
+
+            })
         }
     });
 

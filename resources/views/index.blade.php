@@ -41,7 +41,7 @@
 			@foreach($foods[$i] as $item)
 				<div class="col-sm-12 col-md-4 col-lg-4 food-card">
 					<div class="card">
-						<img class="card-img-top" src="{{asset('storage/images/'.$item->image)}}" alt="Card image cap">
+						<img class="card-img-top" width="300" height="200" src="{{asset('storage/images/'.$item->image)}}" alt="Card image cap">
 						<div class="card-body" id="cardId{{$item->id}}">
 							<div class="row flex-row space-between">
 								<h5 class="card-title"> {{$item->name}}</h5><span class="text-left">{{$item->price}} تومان</span>
@@ -60,74 +60,6 @@
  </div>
 </section>
 @endfor
-{{--<section id="section2" class="container">--}}
-	{{--<h3>ساندویچ</h3>--}}
-	{{--<div class="row">--}}
-		{{--@foreach($sandwiches as $sandwich)--}}
-			{{--<div class="col-sm-12 col-md-4 col-lg-4 food-card">--}}
-				{{--<div class="card">--}}
-					{{--<img class="card-img-top" src="{{asset('storage/images/'.$sandwich->image)}}" alt="Card image cap">--}}
-					{{--<div class="card-body" id="cardId{{$sandwich->id}}">--}}
-						{{--<div class="row flex-row space-between">--}}
-							{{--<h5 class="card-title"> {{$sandwich->name}}</h5><span class="text-left">{{$sandwich->price}} تومان</span>--}}
-						{{--</div>--}}
-						{{--<p class="card-text">{{$sandwich->description}}</p>--}}
-						{{--<div class="flex-row flex-start" id="{{$sandwich->id}}" style="direction: ltr;align-items: center;">--}}
-							{{--<button class="btnNumber btnMines">-</button><span class="foodNumber">0</span><button class="btnNumber btnPlus">+</button>--}}
-							{{--<input hidden value="{{$sandwich->price}}" />--}}
-						{{--</div>--}}
-					{{--</div>--}}
-				{{--</div>--}}
-			{{--</div>--}}
-		{{--@endforeach--}}
-
- 	{{--</div>--}}
-{{--</section>--}}
-{{--<section id="section3" class="container">--}}
-	{{--<h3>پیتزا</h3>--}}
-	{{--<div class="row">--}}
-		{{--@foreach($pizzas as $pizza)--}}
-			{{--<div class="col-sm-12 col-md-4 col-lg-4 food-card">--}}
-				{{--<div class="card">--}}
-					{{--<img class="card-img-top" src="{{asset('storage/images/'.$pizza->image)}}" alt="Card image cap">--}}
-					{{--<div class="card-body" id="cardId{{$pizza->id}}">--}}
-						{{--<div class="row flex-row space-between">--}}
-							{{--<h5 class="card-title"> {{$pizza->name}}</h5><span class="text-left">{{$pizza->price}} تومان</span>--}}
-						{{--</div>--}}
-						{{--<p class="card-text">{{$pizza->description}}</p>--}}
-						{{--<div class="flex-row flex-start" id="{{$pizza->id}}" style="direction: ltr;align-items: center;">--}}
-							{{--<button class="btnNumber btnMines">-</button><span class="foodNumber">0</span><button class="btnNumber btnPlus">+</button>--}}
-							{{--<input hidden value="{{$pizza->price}}" />--}}
-						{{--</div>--}}
-					{{--</div>--}}
-				{{--</div>--}}
-			{{--</div>--}}
-		{{--@endforeach--}}
- 	{{--</div>--}}
-{{--</section>--}}
-{{--<section id="section4" class="container">--}}
-	{{--<h3>نوشیدنی</h3>--}}
-	{{--<div class="row">--}}
-		{{--@foreach($drinks as $drink)--}}
-			{{--<div class="col-sm-12 col-md-4 col-lg-4 food-card">--}}
-				{{--<div class="card">--}}
-					{{--<img class="card-img-top" src="{{asset('storage/images/'.$drink->image)}}" alt="Card image cap">--}}
-					{{--<div class="card-body" id="cardId{{$drink->id}}">--}}
-						{{--<div class="row flex-row space-between">--}}
-							{{--<h5 class="card-title"> {{$drink->name}}</h5><span class="text-left">{{$drink->price}} تومان</span>--}}
-						{{--</div>--}}
-						{{--<p class="card-text">{{$drink->description}}</p>--}}
-						{{--<div class="flex-row flex-start" id="{{$drink->id}}" style="direction: ltr;align-items: center;">--}}
-							{{--<button class="btnNumber btnMines">-</button><span class="foodNumber">0</span><button class="btnNumber btnPlus">+</button>--}}
-							{{--<input hidden value="{{$drink->price}}" />--}}
-						{{--</div>--}}
-					{{--</div>--}}
-				{{--</div>--}}
-			{{--</div>--}}
-		{{--@endforeach--}}
-
-	{{--</div>--}}
-{{--</section>--}}
 
 <a href="#" class="float" id="myBtn"><i class="fa fa-shopping-basket fa-6" aria-hidden="true"></i> <span id="cart">0</span></a>
 

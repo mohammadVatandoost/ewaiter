@@ -1,8 +1,13 @@
 @extends('master.layout')
 @section('content')
 
-<div class="container" style="margin-top: 2%;">
+<div class="container" style="margin-top: 2%;" id="edit">
   <h4>تغییر اطلاعات غذا</h4>
+    @if(session('message'))
+        <div class="alert alert-success" role="alert">
+            {{session('message')}}
+        </div>
+    @endif
     <form action="{{route('editFood',$type->id)}}" method="post" enctype="multipart/form-data" style="margin-bottom: 2%;">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
       <div class="form-group">
@@ -15,14 +20,14 @@
       </div>
       <div class="form-group">
        <label>قیمت غذا</label>
-       <input type="number" name="foodPrice" class="form-control" placeholder="{{$type->price}}">
+       <input type="number" step="1000" name="foodPrice" class="form-control" placeholder="{{$type->price}}">
       </div>
       <div class="form-group">
         <label for="sel1">انتخاب دسته غذا</label>
-        <select class="form-control" id="sel1" name="foodCategory">
-         <option value="bergers">برگرها</option>
-         <option value="sandewitch">ساندویچ ها</option>
-        </select>
+          <select  class="form-control" id="sel1" name="foodCategory">
+              <option selected  disabled>دسته بندی</option>
+              <option v-for="type in categories" value="@{{ type }}">@{{ type }}</option>
+          </select>
       </div>
       <div class="form-group">
        <label>عکس غذا</label>
@@ -70,6 +75,20 @@ body {
 }
 </style>
 <script>
+new Vue({
+    el:'#edit',
+    data:{
+        categories:['']
+    },
+    created:function () {
 
+        vm = this;
+        axios.get('{{route('getCats')}}').then(function (response) {
+            vm.categories = response.data
+
+        })
+
+    }
+})
 </script>
 @endsection

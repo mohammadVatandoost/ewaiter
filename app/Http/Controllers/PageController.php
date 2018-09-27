@@ -13,7 +13,7 @@ class PageController extends Controller
         $foods = [];
         for($i=0;$i<count($types);$i++){
 
-            $foods[$i] = Food::where('category',$types[$i])->get();
+            $foods[$i] = Food::where('category',$types[$i])->where('valid',1)->get();
         }
 
 

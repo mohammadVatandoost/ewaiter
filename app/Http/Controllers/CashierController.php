@@ -22,12 +22,18 @@ class CashierController extends Controller
 
     public function menu(){
 
-        $pizzas = Food::where('category','pizza')->get();
-        $burgers = Food::where('category','burger')->get();
-        $sandwiches = Food::where('category','sandwich')->get();
-        $drinks = Food::where('category','drink')->get();
-        $cats = Category::all();
-        return view('menu',compact('pizzas','burgers','sandwiches','drinks','cats'));
+//        $pizzas = Food::where('category','pizza')->get();
+//        $burgers = Food::where('category','burger')->get();
+//        $sandwiches = Food::where('category','sandwich')->get();
+//        $drinks = Food::where('category','drink')->get();
+        $types = Category::orderBy('priority','asc')->get()->pluck('type');
+        $foods = [];
+        for($i=0;$i<count($types);$i++){
+
+            $foods[$i] = Food::where('category',$types[$i])->get();
+        }
+        $cats = Category::orderBy('priority','asc')->get();
+        return view('menu',compact('foods','types','cats'));
     }
 
     public function editFood($id,Request $request){
@@ -38,14 +44,35 @@ class CashierController extends Controller
 
     public function post_editFood($id,Request $request){
 
+        $food = Food::where('id',$id)->first();
 
-        return 1;
+        if(!is_null($request->foodName)){
+            $food->update(['name'=>$request->foodName]);
+        }
+        if(!is_null($request->foodDes)){
+            $food->update(['description'=>$request->foodDes]);
+        }
+        if(!is_null($request->foodPrice)){
+            $food->update(['price'=>$request->foodPrice]);
+        }
+        if(!is_null($request->foodCategory)){
+            $food->update(['category'=>$request->foodCategory]);
+        }
+        if(!is_null($request->foodImage)){
+            unlink(public_path('storage/images/'.$food->image));
+            $food->image = time().'-'.$request->file('foodImage')->getClientOriginalName();
+            $request->file('foodImage')->move('storage/images',time().'-'.$request->file('foodImage')->getClientOriginalName());
+            $food->update(['image'=>time().'-'.$request->file('foodImage')->getClientOriginalName()]);
+        }
+        return redirect()->back()->with(['message'=>'تغییرات ذخیره شد.']);
+
+
     }
 
     public function report(){
 
         // TODO Add Date filtering
-        // TODO Total Income + Total food selling
+
 
         $arr = [];
         if(!Cache::has('order')){
@@ -100,6 +127,7 @@ class CashierController extends Controller
 
             $orders = Order::where([['created_at','>',Carbon::today()],
                 ['created_at','<',Carbon::today()->addHour(24)]])->get();
+
             return view('orders',compact('orders'));
 
 
@@ -114,7 +142,7 @@ class CashierController extends Controller
     public function paid(Request $request){
 
         Order::where('id',$request->id)->first()->update(['paid'=>1]);
-        return 200;
+        return Order::where('id',$request->id)->first();
     }
 
     public function addCategory(Request $request){
@@ -123,7 +151,7 @@ class CashierController extends Controller
         $cat->type = $request->category;
         $cat->priority = $request->priority;
         $cat->save();
-        return 200;
+        return redirect()->back();
 
 
     }
@@ -150,5 +178,42 @@ class CashierController extends Controller
         $request->file('foodImage')->move('storage/images',time().'-'.$request->file('foodImage')->getClientOriginalName());
         $food->save();
         return redirect()->back();
+    }
+
+    public function validFood(Request $request){
+        $stat = Food::where('id',$request->id)->first()->valid;
+        Food::where('id',$request->id)->first()->update(['valid'=>!$stat]);
+        return 200;
+    }
+    public function removeFood(Request $request){
+        Food::where('id',$request->id)->first()->delete();
+        return redirect()->back();
+    }
+
+    public function catPriority(Request $request){
+
+        $cats = Category::all()->pluck('type');
+        for($i=0;$i<count($cats);$i++){
+
+            $priority = $request[$cats[$i]];
+
+            if(!is_null($priority)){
+                Category::where('type',$cats[$i])->first()->update(['priority'=>$priority]);
+            }
+        }
+// TODO Remove related items when deleting a category
+        if(!is_null($request->removeList)){
+            $removeList = explode(',',$request->removeList);
+            for($t=0;$t<count($removeList);$t++){
+                Category::where('id',$removeList[$t])->first()->delete();
+            }
+        }
+                    return redirect()->back();
+    }
+
+    public function getStat(){
+        $orders = Order::where([['created_at','>',Carbon::today()],
+            ['created_at','<',Carbon::today()->addHour(24)]])->get();
+        return $orders;
     }
 }
