@@ -56,9 +56,9 @@
 
     <form action="{{route('addCategory')}}" method="post" class="flex-row flex-start"  style="margin-bottom: 2%;">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-      <input id="category" class="form-control col-md-3 col-sm-8" type="text" name="category" placeholder="نام دسته">
-      <input id="priority" class="form-control col-md-3 col-sm-2" type="text" name="priority" placeholder="ترتیب نمایش">
-      <button  type="submit" class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
+      <input v-model="categoryTag" id="category" class="form-control col-md-3 col-sm-8" type="text" name="category" placeholder="نام دسته">
+      <input v-model="priority" id="priority" class="form-control col-md-3 col-sm-2" type="number" min="0" step="1" name="priority" placeholder="ترتیب نمایش">
+      <button :disabled="!categoryTag || !priority" type="submit" class="btn btn-primary col-md-1 col-sm-1">ثبت</button>
     </form>
     <hr/>
     <h4>دسته های اضافه شده</h4>
@@ -68,8 +68,9 @@
             @foreach($cats as $cat)
           <li>
             <div class="flex-row flex-start flex-center-align" style=" text-align: center;">
-              <input id="{{$cat->id}}" @click="removeCkBox({{$cat->id}})"  type="checkbox" >
-                <h5> {{$cat->type}} </h5>
+              {{--<input id="{{$cat->id}}" @click="removeCkBox({{$cat->id}})" :checked="checked"  type="checkbox" >--}}
+                <my-checkbox :list="removeList" id="{{$cat->id}}" type="{{$cat->type}}" priority="{{$cat->priority}}"></my-checkbox>
+                {{--<h5 v-show="!del"> {{$cat->type}} </h5>--}}
                 <input id="{{$cat->type}}" class="form-control" type="text" name="{{$cat->type}}" value="{{$cat->priority}}" style="width: 100px;" />
                 <input name="removeList" type="hidden" value="@{{ removeList }}">
 
@@ -77,7 +78,7 @@
           </li>
             @endforeach
         </ul>
-        <button type="submit" class="btn btn-success" style="display: block;margin: auto;">ذخیره</button>
+        <button  type="submit" class="btn btn-success" style="display: block;margin: auto;">ذخیره</button>
      </form>
  </div>
  <!-- Menu category -->
@@ -226,6 +227,15 @@
         vertical-align: middle;
     }
 </style>
+
+<template id="my-checkbox">
+    <input type="checkbox" @click="removeCkBox(id,list)">
+    <h5 v-show="!deleteTag" >@{{ type }}</h5>
+    <h5><del v-show="deleteTag"> @{{type}} </del></h5>
+
+</template>
+
+
 <script>
     function myFunction() {
         var x = document.getElementById("myTopnav");
@@ -278,13 +288,42 @@
 
         })
     }
+    Vue.component('my-checkbox',{
 
+        template:'#my-checkbox',
+        props:['id','list','type','priority'],
+        methods:{
+            removeCkBox:function (id,list) {
+
+                this.stat = !this.stat;
+                if(this.stat == true){
+                    this.deleteTag = !this.deleteTag;
+                    list.unshift(id);
+
+                }else{
+                    list.shift(id);
+                    this.deleteTag = !this.deleteTag;
+                }
+                console.log(list)
+            }
+        },
+        data:function () {
+            return {
+                stat:false,
+                deleteTag:false
+
+            }
+        }
+    });
     new Vue({
         el:'#app',
         data:{
             list:[''],
             hidden:true,
             removeList:[],
+            categoryTag:'',
+            priority:'',
+            disableButton:true
 
         },
         methods:{
@@ -300,12 +339,7 @@
                    }
                 })
             },
-            removeCkBox:function (id) {
 
-                 this.removeList.unshift(id);
-
-
-            }
         },
         created:function () {
 

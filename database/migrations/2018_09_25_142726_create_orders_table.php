@@ -20,9 +20,10 @@ class CreateOrdersTable extends Migration
             $table->string('price');
             $table->text('info')->nullable();
             $table->string('delivered')->default(0);
+            $table->string('pending')->default(0);
             $table->string('paid')->default(0);
             $table->string('order_number')->default(0);
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->default(0);
             $table->timestamps();
         });
     }

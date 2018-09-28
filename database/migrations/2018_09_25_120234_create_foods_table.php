@@ -16,12 +16,14 @@ class CreateFoodsTable extends Migration
         Schema::create('foods', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
-            $table->string('description');
+            $table->text('description');
             $table->unsignedInteger('price')->default(0);
             $table->string('category');
             $table->unsignedInteger('sold')->default(0);
             $table->mediumText('image')->nullable();
             $table->tinyInteger('valid')->default(1);
+            $table->unsignedInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

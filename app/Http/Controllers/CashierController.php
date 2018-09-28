@@ -125,18 +125,70 @@ class CashierController extends Controller
 
     public function orders(){
 
-            $orders = Order::where([['created_at','>',Carbon::today()],
+        $orders = Order::where([['created_at','>',Carbon::today()],
                 ['created_at','<',Carbon::today()->addHour(24)]])->get();
-
             return view('orders',compact('orders'));
 
 
+    }
+    public function getOrders(){
+
+        $orders = Order::where([['created_at','>',Carbon::today()],
+            ['created_at','<',Carbon::today()->addHour(24)]])->get();
+
+        foreach ($orders as $order){
+            $order['order'] = unserialize($order->order);
+            if(Carbon::now()->diffInMinutes($order->created_at)>60){
+                $order['hour'] = Carbon::now()->diffInHours($order->created_at);
+            }
+            else{
+                $order['minute'] =  Carbon::now()->diffInMinutes($order->created_at);
+        }
+        }
+
+        return $orders;
     }
 
     public function delivered(Request $request){
 
         Order::where('id',$request->id)->first()->update(['delivered'=>1]);
-        return 200;
+        Order::where('id',$request->id)->first()->update(['pending'=>0]);
+        $orders = Order::where([['created_at','>',Carbon::today()],
+            ['created_at','<',Carbon::today()->addHour(24)]])->get();
+
+        foreach ($orders as $order){
+            $order['order'] = unserialize($order->order);
+            if(Carbon::now()->diffInMinutes($order->created_at)>60){
+                $order['hour'] = Carbon::now()->diffInHours($order->created_at);
+            }
+            else{
+                $order['minute'] =  Carbon::now()->diffInMinutes($order->created_at);
+            }
+        }
+
+        return $orders;
+
+
+    }
+
+    public function pending(Request $request){
+
+        Order::where('id',$request->id)->first()->update(['pending'=>1]);
+        $orders = Order::where([['created_at','>',Carbon::today()],
+            ['created_at','<',Carbon::today()->addHour(24)]])->get();
+
+        foreach ($orders as $order){
+            $order['order'] = unserialize($order->order);
+            if(Carbon::now()->diffInMinutes($order->created_at)>60){
+                $order['hour'] = Carbon::now()->diffInHours($order->created_at);
+            }
+            else{
+                $order['minute'] =  Carbon::now()->diffInMinutes($order->created_at);
+            }
+        }
+
+        return $orders;
+
     }
 
     public function paid(Request $request){
@@ -174,6 +226,7 @@ class CashierController extends Controller
         $food->price = $request->foodPrice;
         $food->description = $request->foodDes;
         $food->category = $request->foodCategory;
+        $food->category_id = DB::table('categories')->where('categories.type',$request->foodCategory)->first()->id;
         $food->image = time().'-'.$request->file('foodImage')->getClientOriginalName();
         $request->file('foodImage')->move('storage/images',time().'-'.$request->file('foodImage')->getClientOriginalName());
         $food->save();
@@ -186,7 +239,9 @@ class CashierController extends Controller
         return 200;
     }
     public function removeFood(Request $request){
-        Food::where('id',$request->id)->first()->delete();
+        $food =  Food::where('id',$request->id)->first();
+        unlink(public_path('storage/images/'.$food->image));
+        $food->delete();
         return redirect()->back();
     }
 

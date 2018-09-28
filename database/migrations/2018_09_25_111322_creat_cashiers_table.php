@@ -18,7 +18,7 @@ class CreatCashiersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('reset_password');
-            $table->string('remember_token');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

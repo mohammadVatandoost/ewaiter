@@ -17,10 +17,11 @@ class UserController extends Controller
         $order->order = serialize($orderArr);
         $order->price = $request->total_price;
         $order->table_id = $request->table_id;
+
         if(!Cache::has('order_number')){
-            Cache::put('order_number',1,20);
+            Cache::put('order_number',1,1440);
         }else{
-            Cache::put('order_number',Cache::get('order_number')+1,20);
+            Cache::put('order_number',Cache::get('order_number')+1,1440);
         }
         $order->order_number = Cache::get('order_number');
         $order->save();
