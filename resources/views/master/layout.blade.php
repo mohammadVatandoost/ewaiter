@@ -17,31 +17,31 @@
     @if(request()->route()->getName() == 'orders')
         <a class="activeNav" href="{{route('orders')}}">سفارش ها</a>
         <a  href="{{route('report')}}">گزارش فروش</a>
-        <a  href="{{route('contact')}}">Contact</a>
+        <a  href="{{route('settings')}}">تنظیمات</a>
         <a  href="{{route('menu')}}" >منو</a>
         @elseif(request()->route()->getName() == 'report')
         <a  href="{{route('orders')}}">سفارش ها</a>
         <a class="activeNav" href="{{route('report')}}">گزارش فروش</a>
-        <a  href="{{route('contact')}}">Contact</a>
+        <a  href="{{route('settings')}}">تنظیمات</a>
         <a  href="{{route('menu')}}" >منو</a>
 
-        @elseif(request()->route()->getName() == 'contact')
+        @elseif(request()->route()->getName() == 'settings')
         <a  href="{{route('orders')}}">سفارش ها</a>
         <a  href="{{route('report')}}">گزارش فروش</a>
-        <a class="activeNav" href="{{route('contact')}}">Contact</a>
+        <a class="activeNav" href="{{route('settings')}}">تنظیمات</a>
         <a  href="{{route('menu')}}" >منو</a>
 
     @elseif(request()->route()->getName() == 'menu')
         <a  href="{{route('orders')}}">سفارش ها</a>
         <a  href="{{route('report')}}">گزارش فروش</a>
-        <a  href="{{route('logout')}}">Contact</a>
+        <a  href="{{route('settings')}}">تنظیمات</a>
         <a class="activeNav" href="{{route('menu')}}" >منو</a>
 
         @elseif(request()->route()->getName() == 'editFood')
 
         <a  href="{{route('orders')}}">سفارش ها</a>
         <a  href="{{route('report')}}">گزارش فروش</a>
-        <a  href="{{route('logout')}}">Contact</a>
+        <a  href="{{route('settings')}}">تنظیمات</a>
         <a class="activeNav" href="{{route('menu')}}" >منو</a>
 
     @endif

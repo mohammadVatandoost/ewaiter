@@ -46,10 +46,9 @@ Route::post('category/add',['as'=>'addCategory','uses'=>'CashierController@addCa
 Route::post('category/remove',['as'=>'removeCategory','uses'=>'CashierController@removeCategory']);
 Route::post('category/edit',['as'=>'catPriority','uses'=>'CashierController@catPriority']);
 
-
+Route::get('settings',['as'=>'settings','uses'=>'PageController@settings']);
 
 Route::post('food/add',['as'=>'addFood','uses'=>'CashierController@addFood']);
 
-Route::get('contact',['as'=>'contact','uses'=>'PageController@contact']);
 
 

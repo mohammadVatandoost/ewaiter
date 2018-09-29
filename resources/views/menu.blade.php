@@ -64,10 +64,10 @@
     <h4>دسته های اضافه شده</h4>
      <form action="{{route('catPriority')}}" method="post">
          <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <ul>
+        <ul class="row">
             @foreach($cats as $cat)
-          <li>
-            <div class="flex-row flex-start flex-center-align" style=" text-align: center;">
+          <li class="col-lg-3 col-md-4 col-sm-6">
+            <div class="flex-row space-around flex-center-align" style=" align-items: center;">
               {{--<input id="{{$cat->id}}" @click="removeCkBox({{$cat->id}})" :checked="checked"  type="checkbox" >--}}
                 <my-checkbox :list="removeList" id="{{$cat->id}}" type="{{$cat->type}}" priority="{{$cat->priority}}"></my-checkbox>
                 {{--<h5 v-show="!del"> {{$cat->type}} </h5>--}}

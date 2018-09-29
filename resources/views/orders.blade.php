@@ -61,16 +61,15 @@
 @section('content')
 
     <div class="container" style="margin-top: 2%;" id="order">
-        <div class="flex-row flex-start">
-            <a href="" class="btn btn-warning">دیروز</a>
-            <a href="" class="btn btn-success">امروز</a>
+        <div class="flex-row space-around">
+           <div class="flex-row flex-start">
+            <a href="" class="btn btn-warning" style="margin-left: 1%;margin-right: 1%;">دیروز</a>
+            <a href="" class="btn btn-success" style="margin-left: 1%;margin-right: 1%;">امروز</a>
+           </div>
             <button @click="reset" href="{{route('reset')}}" class="btn btn-danger">بازشماری سفارش</button>
         </div>
-
-          <div v-for="order in orders">
-            <input type="text" hidden value="{{$i=0}}">
-            <div class="row" style="margin-top: 2%;margin-bottom: 2%;">
-                <div class="col-sm-12 col-md-4 col-lg-4">
+        <div class="row" style="margin-top: 2%;margin-bottom: 2%;">
+                <div v-for="order in orders" class="col-sm-12 col-md-4 col-lg-4">
                     <div class="card" style="padding: 1%;">
                         <div class="flex-row space-around">
 
@@ -111,9 +110,7 @@
 
                         </div>
                     </div>
-                </div>
             </div>
-            <input type="hidden" value="{{$i=$i+1}}">
           </div>
 
     </div>

@@ -47,7 +47,7 @@
 								<h5 class="card-title"> {{$item->name}}</h5><span class="text-left">{{$item->price}} تومان</span>
 							</div>
 							<p class="card-text">{{$item->description}}</p>
-							<div class="flex-row flex-start" id="{{$item->id}}" style="direction: ltr;align-items: center;">
+							<div class="flex-row flex-start"  data-num="{{$item->id}}" id="{{$item->id}}" style="direction: ltr;align-items: center;">
 								<button class="btnNumber btnMines">-</button><span class="foodNumber">0</span><button class="btnNumber btnPlus">+</button>
 								<input hidden value="{{$item->price}}" />
 							</div>
@@ -138,46 +138,57 @@ $('.btnMines').hide();
 	var allPrice = 0;
 $(document).on('click', '.btnMines', function () {
 // $('.btnMines').click(function(){
-   console.log('btnMines');console.log($(this).parent().attr('id'));
-	 var foodId = $(this).parent().attr('id') ;
-	 var foodNumber = $('#'+foodId+' span').text();console.log('foodNumber : '+foodNumber);
+  // console.log('btnMines');//console.log($(this).parent().attr('id'));
+     var temp = $(this).parent().attr('data-num');console.log('data-num : '+temp);
+	 var foodId = $(this).parent().attr('data-num') ;
+	 var foodNumber = $('#'+foodId+' span').text();//console.log('foodNumber : '+foodNumber);
 	 var cardId = $(this).parent().parent().attr('id') ;
-	 var foodName = $('#'+cardId+' h5').text();console.log('foodName : '+foodName);
+	 var foodName = $('#'+cardId+' h5').text();//console.log('foodName : '+foodName);
 	 var price = $('#'+foodId+' input').val();
 	 foodNumber = foodNumber - 1 ;
 	 if(!(foodNumber < 0)) {
-		 $('#'+foodId+' span').text(foodNumber);console.log('foodNumber : '+foodNumber);
+		 $('#'+foodId+' span').text(foodNumber);//console.log('foodNumber : '+foodNumber);
 		 setOrder(foodId, foodNumber, price, foodName);
 	 }
 	 if(foodNumber == 0) {
 	 	$('#'+foodId+' .btnMines').hide();
 	 }
+	 renderModal();
 });
 $(document).on('click', '.btnPlus', function () {
 // $('.btnPlus').click(function(){
-			 console.log('btnPlus');console.log($(this).parent().attr('id'));
-			 var foodId = $(this).parent().attr('id') ;
-			 var foodNumber = $('#'+foodId+' span').text();console.log('foodNumber : '+foodNumber);
-			 var cardId = $('#'+foodId).parent().attr('id') ;console.log('cardId : '+cardId);
-	         var foodName = $('#'+cardId+' h5').text();console.log('foodName : '+foodName);
+			 //console.log('btnPlus');console.log($(this).parent().attr('id'));
+			 var temp = $(this).parent().attr('data-num');console.log('data-num : '+temp);
+			 var foodId = $(this).parent().attr('data-num') ;
+			 var foodNumber = $('#'+foodId+' span').text();//console.log('foodNumber : '+foodNumber);
+			 var cardId = $('#'+foodId).parent().attr('id') ;//console.log('cardId : '+cardId);
+	         var foodName = $('#'+cardId+' h5').text();//console.log('foodName : '+foodName);
 			 var price = $('#'+foodId+' input').val();
 			 foodNumber = parseInt(foodNumber) + 1 ;
-			 $('#'+foodId+' span').text(foodNumber);console.log('foodNumber : '+foodNumber);
+			 $('#'+foodId+' span').text(foodNumber);//console.log('foodNumber : '+foodNumber);
 			 setOrder(foodId, foodNumber, price, foodName);
 			 $('#'+foodId+' .btnMines').show();
+			 renderModal();
 });
 
 function setOrder(foodId, foodNumber, price, foodName) {
-	if(order.length > 0) {
+ if(order.length > 0) {
    for (var i = 0; i<order.length; i++) {
-    if(order[i].foodId == foodId) {
-			order[i].foodNumber = foodNumber;
-		} else if( (i+1) == order.length) {
+     if(order[i].foodId == foodId) {
+     	if(foodNumber == 0) {
+     	  removeFromOrder(i);console.log("remove Food");break;
+			
+     	} else {
+     		order[i].foodNumber = foodNumber;console.log("old food added");break;
+     	}
+	 } else if( (i+1) == order.length) {
       order.push({foodId: foodId, foodNumber: foodNumber, price: price, foodName: foodName});
-		}
+      console.log("new food added");
 	 }
+	}
  } else {
    order.push({foodId: foodId, foodNumber: foodNumber, price: price, foodName: foodName});
+   console.log("new food added");
  }
  $('#cart').text(order.length);
 	console.log('order : ');console.log(order);
@@ -194,8 +205,18 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal
 btn.onclick = function() {
+	modal.style.display = "block";
+	renderModal();
+}
+
+function removeFromOrder(index) {
+  if (index > -1) {
+    order.splice(index, 1);
+  }
+}
+
+function renderModal() {
 	$("#orderList").empty();
-    modal.style.display = "block";
     if(order.length > 0) {
        var htmlString = '<h2 class="text-center">سفارش شما</h2><ul class="orderList">';
 //       var allPrice = 0 ;
@@ -206,7 +227,7 @@ btn.onclick = function() {
        	                    <div class="row flex-row space-between">
 								 <h5 class="card-title">`+order[i].foodName+`</h5><span class="text-left">`+order[i].price*order[i].foodNumber+` تومان</span>
 							</div>
-							<div class="flex-row flex-start" id="food10" style="direction: ltr;align-items: center;">
+							<div class="flex-row flex-start" data-num="`+order[i].foodId+`" style="direction: ltr;align-items: center;">
 								<button class="btnNumber btnMines">-</button><span class="foodNumber">`+order[i].foodNumber+`</span><button class="btnNumber btnPlus">+</button>
 								<input hidden value="`+order[i].price+`" />
 							 </div>
@@ -217,6 +238,11 @@ btn.onclick = function() {
              <div class="flex-row space-between flex-center-align">
                 <span class="roomNumber">شماره میز : </span>
                 <input type="text" id="table_id" class="form-control" name="roomNumber">
+             </div>
+             <br/>
+             <div class="flex-row space-between flex-center-align">
+                <span class="roomNumber">توضیحات : </span>
+                <textarea rows="5" type="text" id="des_id" class="form-control" name="description" />
              </div>
              <p>مجموع سفارش شما : <span>`+allPrice+`</span></p>
              <button onclick="sendOrder()" class="btn btn-success" style="display: block;margin: auto;">ثبت سفارش</button>

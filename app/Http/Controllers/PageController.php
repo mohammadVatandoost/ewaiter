@@ -28,8 +28,8 @@ class PageController extends Controller
     }
 
 
-    public function contact(){
+    public function settings(){
 
-        return 'contact';
+        return view('setting');
     }
 }
